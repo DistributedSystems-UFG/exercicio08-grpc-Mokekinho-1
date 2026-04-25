@@ -54,6 +54,42 @@ class EmployeeServer(EmployeeService_pb2_grpc.EmployeeServiceServicer):
       emp_data = EmployeeService_pb2.EmployeeData(id=item['id'], name=item['name'], title=item['title']) 
       list.employee_data.append(emp_data)
     return list
+  
+  def GetEmployeesByTitle(self, request, context):
+        filtered_employees = [
+            emp for emp in empDB 
+            if request.title.lower() in emp['title'].lower()
+        ]
+        
+        response_list = EmployeeService_pb2.EmployeeDataList()
+        
+        for item in filtered_employees:
+            emp_data = EmployeeService_pb2.EmployeeData(
+                id=item['id'], 
+                name=item['name'], 
+                title=item['title']
+            )
+            response_list.employee_data.append(emp_data)
+            
+        return response_list
+  
+  def GetEmployeesByName(self, request, context):
+    filtered_employees = [
+          emp for emp in empDB 
+          if request.name.lower() in emp['name'].lower()
+      ]
+      
+    response_list = EmployeeService_pb2.EmployeeDataList()
+      
+    for item in filtered_employees:
+        emp_data = EmployeeService_pb2.EmployeeData(
+            id=item['id'], 
+            name=item['name'], 
+            title=item['title']
+        )
+        response_list.employee_data.append(emp_data)
+          
+    return response_list
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

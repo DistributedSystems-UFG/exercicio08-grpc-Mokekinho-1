@@ -31,6 +31,17 @@ def run():
         response = stub.ListAllEmployees(EmployeeService_pb2.EmptyMessage())
         print ('All employees: ' + str(response))
 
+        #achar funcionario por titulo
+        title = "Programmer"
+        response = stub.GetEmployeesByTitle(EmployeeService_pb2.EmployeeTitleRequest(title = title))
+
+        print(f"Todo do cargo: {title}\n"+ str(response))
+
+        #achar funcionario por nome
+        name = "Saravanan"
+        response = stub.GetEmployeesByName(EmployeeService_pb2.EmployeeNameRequest(name = name))
+        print(f"Todo com o nome: {name}\n"+ str(response))
+
 if __name__ == '__main__':
     logging.basicConfig()
     run()
